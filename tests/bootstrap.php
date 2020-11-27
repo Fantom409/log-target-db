@@ -2,12 +2,6 @@
 
 declare(strict_types=1);
 
-/** @noinspection PhpIncludeInspection */
-
-use yii\di\Container;
-use yii\helpers\Yii;
-use Yiisoft\Composer\Config\Builder;
-
 // ensure we get report on all possible php errors
 error_reporting(-1);
 
@@ -25,8 +19,4 @@ $_SERVER['SCRIPT_FILENAME'] = __FILE__;
     }
 
     require_once $composerAutoload;
-
-    $container = new Container(require Builder::path('tests'));
-
-    Yii::setContainer($container);
 })();

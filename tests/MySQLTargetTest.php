@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Log\Tests;
+namespace Yiisoft\Log\Target\Db\Tests;
 
 /**
  * @group db

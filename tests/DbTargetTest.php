@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Log\Tests;
+namespace Yiisoft\Log\Target\Db\Tests;
 
 use Psr\Log\LogLevel;
-use yii\tests\TestCase;
 use Yiisoft\Db\Connection;
 use Yiisoft\Db\Query;
-use Yiisoft\Log\DbTarget;
+use Yiisoft\Log\Target\Db\DbTarget;
 use Yiisoft\Log\Logger;
 use Yiisoft\Yii\Console\ExitCode;
 
@@ -19,7 +18,7 @@ use Yiisoft\Yii\Console\ExitCode;
 abstract class DbTargetTest extends TestCase
 {
     protected static $database;
-    protected static $driverName;
+    protected static string $driverName;
 
     /**
      * @var Connection
@@ -30,6 +29,7 @@ abstract class DbTargetTest extends TestCase
 
     protected function runConsoleAction($route, $params = [])
     {
+        return;
         $this->destroyApplication();
         $this->mockApplication([
             'id' => 'Migrator',
@@ -57,7 +57,7 @@ abstract class DbTargetTest extends TestCase
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $databases = static::getParam('databases');
@@ -71,7 +71,7 @@ abstract class DbTargetTest extends TestCase
         $this->runConsoleAction('migrate/up', ['migrationPath' => '@Yiisoft/Log/migrations/', 'interactive' => false]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         self::getConnection()->createCommand()->truncateTable(self::$logTable)->execute();
         $this->runConsoleAction('migrate/down', ['migrationPath' => '@Yiisoft/Log/migrations/', 'interactive' => false]);
@@ -82,6 +82,7 @@ abstract class DbTargetTest extends TestCase
     }
 
     /**
+     * //@TODO refactor
      * @throws \Yiisoft\Db\Exception
      * @throws \yii\exceptions\InvalidConfigException
      * @throws \yii\exceptions\InvalidArgumentException

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Log\Tests;
+namespace Yiisoft\Log\Target\Db\Tests;
 
 use Yiisoft\Yii\Console\Controllers\MigrateController;
 
@@ -11,9 +11,6 @@ use Yiisoft\Yii\Console\Controllers\MigrateController;
  */
 class EchoMigrateController extends MigrateController
 {
-    /**
-     * {@inheritdoc}
-     */
     public function stdout($string)
     {
         echo $string;

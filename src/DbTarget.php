@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Yiisoft\Log\Target\Db;
 
-use RuntimeException;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Log\LogRuntimeException;
+use Yiisoft\VarDumper\VarDumper;
 use Yiisoft\Log\Target;
 
 /**
@@ -70,9 +71,16 @@ class DbTarget extends Target
                 VALUES (:level, :category, :log_time, :message)";
 
         $command = $this->db->createCommand($sql);
-        $formatted = $this->getFormattedMessages();
-
-        foreach ($this->getMessages() as $key => $message) {
+        foreach ($this->getMessages() as $message) {
+            [$level, $text, $context] = $message;
+            if (!is_string($text)) {
+                // exceptions may not be serializable if in the call stack somewhere is a Closure
+                if ($text instanceof \Throwable || $text instanceof \Exception) {
+                    $text = (string) $text;
+                } else {
+                    $text = VarDumper::create($text)->export();
+                }
+            }
             if ($command->bindValues([
                 ':level' => $message->level(),
                 ':category' => $message->context('category'),
